@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broker
+  namespace: paperless-ngx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: broker
+  template:
+    metadata:
+      labels:
+        app: broker
+    spec:
+      containers:
+        - name: broker
+          image: redis:7
+          volumeMounts:
+            - name: redisdata
+              mountPath: /data
+      volumes:
+        - name: redisdata
+          persistentVolumeClaim:
+            claimName: redisdata-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: broker
+  namespace: paperless-ngx
+spec:
+  type: ClusterIP
+  selector:
+    app: broker
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: 6379
