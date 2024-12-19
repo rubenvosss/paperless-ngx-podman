@@ -32,15 +32,17 @@ spec:
         imagePullPolicy: Always
         args:
           - --api
-          - --kubernetes
-          - --logLevel=INFO
+          - --api.dashboard=true
+          - --log.level=INFO
           - --ping
-          - --ping.entrypoint=hc
-          - --entryPoints=Name:https Address::443 TLS
-          - --entryPoints=Name:http Address::80 Redirect.EntryPoint:https
-          - --entryPoints=Name:hc Address::8000
-          - --defaultentrypoints=https
-          - --sendanonymoususage=true
+          - --ping.entryPoint=hc
+          - --entryPoints.https.address=:443
+          - --entryPoints.http.address=:80
+          - --entryPoints.http.http.redirections.entryPoint.to=https
+          - --entryPoints.http.http.redirections.entryPoint.scheme=https
+          - --entryPoints.hc.address=:8000
+          - --entryPoints.https.http.tls=true
+          - --metrics.prometheus=true
         ports:
           - name: http
             containerPort: 80
