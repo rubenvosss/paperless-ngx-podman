@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: traefik-ingress
+  namespace: default
+  annotations:
+    # Tells Kubernetes which ingress class to use. If you are using Traefik v2 and no ingressClass resource is defined, this annotation works.
+    kubernetes.io/ingress.class: traefik
+
+    # If you want Traefik to route to HTTPS by default, and you're using TLS termination in Traefik:
+    # traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  # Optionally specify the ingressClassName if you've set one up. If you haven't created an IngressClass, you can skip this.
+  # ingressClassName: traefik
+
+  # Define the rules for routing
+  rules:
+  - host: example.com # Replace with your real domain
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-service # Replace with your service name
+            port:
+              number: 80
+
+  # TLS configuration
+  tls:
+  - hosts:
+    - example.com
+    secretName: my-tls-secret # Replace with your TLS secret name
