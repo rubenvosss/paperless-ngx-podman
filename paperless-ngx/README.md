@@ -1,5 +1,5 @@
 
-command to start: docker compose up
+command to start development server: docker compose up
 
 url: localhost:8000
 login: ruben
